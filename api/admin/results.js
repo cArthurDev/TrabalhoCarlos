@@ -8,8 +8,8 @@ function respondError(res, status, message) {
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
 
-  if (req.method !== "GET") {
-    res.setHeader("Allow", "GET");
+  if (req.method !== "GET" && req.method !== "DELETE") {
+    res.setHeader("Allow", "GET, DELETE");
     return respondError(res, 405, "Método não permitido.");
   }
 
@@ -29,6 +29,30 @@ module.exports = async function handler(req, res) {
   };
 
   try {
+    if (req.method === "DELETE") {
+      const id = typeof req.query?.id === "string" ? req.query.id.trim() : "";
+      if (!id) {
+        return respondError(res, 400, "Informe o registro que deseja apagar.");
+      }
+
+      const response = await fetch(
+        `${endpoint}?id=eq.${encodeURIComponent(id)}`,
+        {
+          method: "DELETE",
+          headers: {
+            ...headers,
+            Prefer: "return=minimal"
+          }
+        }
+      );
+
+      if (!response.ok) {
+        return respondError(res, 502, "Não foi possível apagar a resposta.");
+      }
+
+      return res.status(200).json({ deleted: true });
+    }
+
     const response = await fetch(
       `${endpoint}?select=id,student_name,score,answers,created_at&order=created_at.desc&limit=500`,
       { headers }

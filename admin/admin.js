@@ -39,6 +39,40 @@ async function requestJSON(url, options) {
   return data;
 }
 
+async function deleteResult(resultId, name, deleteButton) {
+  if (!window.confirm(`Apagar a resposta de "${name}"? Essa ação não pode ser desfeita.`)) {
+    return;
+  }
+
+  deleteButton.disabled = true;
+  deleteButton.setAttribute("aria-label", `Apagando resposta de ${name}`);
+
+  try {
+    await requestJSON(`/api/admin/results?id=${encodeURIComponent(resultId)}`, {
+      method: "DELETE"
+    });
+    tableStatus.textContent = `Resposta de "${name}" apagada.`;
+    await loadResults();
+  } catch (error) {
+    deleteButton.disabled = false;
+    tableStatus.textContent = error.message || "Não foi possível apagar a resposta.";
+  }
+}
+
+function appendDeleteCell(result) {
+  const cell = document.createElement("td");
+  cell.className = "delete-cell";
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "delete-button";
+  button.title = `Apagar resposta de ${result.name}`;
+  button.setAttribute("aria-label", `Apagar resposta de ${result.name}`);
+  button.textContent = "🗑";
+  button.addEventListener("click", () => deleteResult(result.id, result.name, button));
+  cell.appendChild(button);
+  return cell;
+}
+
 function appendAnswerCell(answer) {
   const cell = document.createElement("td");
 
@@ -85,7 +119,8 @@ function renderResults(results) {
       label: `Pergunta ${index + 1}`,
       detail: question.title
     })),
-    { label: "Enviado em" }
+    { label: "Enviado em" },
+    { label: "Ação" }
   ];
   headers.forEach(({ label, detail }) => {
     const cell = document.createElement("th");
@@ -110,7 +145,7 @@ function renderResults(results) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
     cell.className = "empty-cell";
-    cell.colSpan = questions.length + 3;
+    cell.colSpan = questions.length + 4;
     cell.textContent = "Ainda não há respostas.";
     row.appendChild(cell);
     resultsBody.appendChild(row);
@@ -137,6 +172,7 @@ function renderResults(results) {
     dateCell.className = "date-cell";
     dateCell.textContent = new Date(result.createdAt).toLocaleString("pt-BR");
     row.appendChild(dateCell);
+    row.appendChild(appendDeleteCell(result));
     resultsBody.appendChild(row);
   });
 }
