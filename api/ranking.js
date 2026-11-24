@@ -7,7 +7,7 @@ function respondError(res, status, message) {
 
 module.exports = async function handler(req, res) {
   const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabaseKey = process.env.SUPABASE_SECRET_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
     return respondError(res, 500, "O ranking ainda não foi configurado.");
@@ -15,8 +15,7 @@ module.exports = async function handler(req, res) {
 
   const endpoint = `${supabaseUrl.replace(/\/$/, "")}/rest/v1/quiz_results`;
   const headers = {
-    apikey: supabaseKey,
-    Authorization: `Bearer ${supabaseKey}`
+    apikey: supabaseKey
   };
 
   try {
