@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administração | Questionário</title>
+    <link rel="stylesheet" href="/admin/admin.css" />
+  </head>
+  <body>
+    <main class="admin-shell">
+      <section class="login-card" id="login-panel">
+        <span class="eyebrow">Área restrita</span>
+        <h1>Acessar respostas</h1>
+        <p class="login-intro">Entre com o usuário e a senha da administração.</p>
+        <form id="login-form" method="post" action="/api/admin/login">
+          <label for="username">Usuário</label>
+          <input id="username" name="username" type="text" autocomplete="username" required />
+          <label for="password">Senha</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required />
+          <button type="submit" id="login-button">Entrar</button>
+        </form>
+        <p class="form-status" id="login-status" role="status"></p>
+      </section>
+
+      <section class="results-panel" id="results-panel" hidden>
+        <div class="page-heading">
+          <div>
+            <span class="eyebrow">Área restrita</span>
+            <h1>Respostas dos alunos</h1>
+            <p class="results-summary" id="results-summary">Carregando respostas...</p>
+          </div>
+          <div class="toolbar">
+            <button class="secondary-button" id="refresh-button" type="button">Atualizar</button>
+            <button class="secondary-button" id="logout-button" type="button">Sair</button>
+          </div>
+        </div>
+
+        <p class="table-status" id="table-status" role="status"></p>
+        <div class="table-frame">
+          <table>
+            <thead id="results-head"></thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    <script src="/quiz-data.js"></script>
+    <script src="/admin/admin.js"></script>
+  </body>
+</html>

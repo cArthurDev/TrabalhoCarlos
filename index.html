@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Questionario</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="quiz" aria-live="polite">
+      <section class="screen active" id="name-screen">
+        <div class="quiz-card name-card">
+          <span class="eyebrow">Questionario</span>
+          <h1>Qual é o seu nome?</h1>
+          <div class="group-credit">
+            <span class="group-label">Nosso grupo</span>
+            <p>Amanda Gonçalves · Carlos Henrique · Sofia Rabelo</p>
+          </div>
+          <form id="name-form" autocomplete="on">
+            <label class="sr-only" for="student-name">Seu nome</label>
+            <input
+              id="student-name"
+              name="student-name"
+              type="text"
+              placeholder="Digite seu nome"
+              autocomplete="name"
+              required
+            />
+            <button class="start-button" type="submit">Começar</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="screen" id="question-screen">
+        <div class="quiz-card question-card">
+          <div class="progress-wrap">
+            <span id="progress-label">Pergunta 1 de 4</span>
+            <div class="progress-track" aria-hidden="true">
+              <div class="progress-bar" id="progress-bar"></div>
+            </div>
+          </div>
+
+          <h1 id="question-title"></h1>
+          <div class="illustration" id="question-illustration" aria-hidden="true"></div>
+          <div class="answers" id="answers"></div>
+        </div>
+      </section>
+
+      <section class="screen" id="thanks-screen">
+        <div class="thanks-card">
+          <div class="checkmark" aria-hidden="true">✓</div>
+          <h1>Obrigado por Responder</h1>
+          <p class="final-score" id="final-score"></p>
+          <div class="leaderboard">
+            <h2>Ranking da turma</h2>
+            <ol id="leaderboard-list" aria-live="polite">
+              <li class="leaderboard-status">Carregando ranking...</li>
+            </ol>
+            <p class="leaderboard-error" id="leaderboard-error" role="status"></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/quiz-data.js"></script>
+    <script src="/script.js"></script>
+  </body>
+</html>
