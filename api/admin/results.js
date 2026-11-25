@@ -64,12 +64,8 @@ module.exports = async function handler(req, res) {
 
     const results = await response.json();
     return res.status(200).json(
-      results.map((result) => ({
-        id: result.id,
-        name: result.student_name,
-        score: result.score,
-        createdAt: result.created_at,
-        answers: Array.isArray(result.answers)
+      results.map((result) => {
+        const answerDetails = Array.isArray(result.answers)
           ? questions.map((question, index) => {
               const answerIndex = result.answers[index];
               const hasAnswer =
@@ -83,8 +79,22 @@ module.exports = async function handler(req, res) {
                 isCorrect: hasAnswer ? answerIndex === question.correctAnswer : null
               };
             })
-          : null
-      }))
+          : null;
+        const score = Array.isArray(answerDetails)
+          ? answerDetails.reduce(
+              (total, answer) => total + (answer.isCorrect === true ? 1 : 0),
+              0
+            )
+          : 0;
+
+        return {
+          id: result.id,
+          name: result.student_name,
+          score,
+          createdAt: result.created_at,
+          answers: answerDetails
+        };
+      })
     );
   } catch (error) {
     if (error instanceof TypeError) {

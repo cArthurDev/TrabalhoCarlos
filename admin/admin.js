@@ -114,7 +114,7 @@ function renderResults(results) {
   const headerRow = document.createElement("tr");
   const headers = [
     { label: "Aluno" },
-    { label: "Nota" },
+    { label: "Acertos" },
     ...questions.map((question, index) => ({
       label: `Pergunta ${index + 1}`,
       detail: question.title
@@ -161,7 +161,7 @@ function renderResults(results) {
 
     const scoreCell = document.createElement("td");
     scoreCell.className = "score-cell";
-    scoreCell.textContent = `${result.score} / ${questions.length}`;
+    scoreCell.textContent = `${result.score} de ${questions.length} acertos`;
     row.appendChild(scoreCell);
 
     questions.forEach((_, index) => {
